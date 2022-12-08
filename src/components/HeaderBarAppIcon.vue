@@ -5,7 +5,7 @@ withDefaults(
     appName?: string;
     href?: string;
     isTextVisible: boolean;
-    isCurrentlyActiveApp: boolean;
+    isCurrentlyActiveApp?: boolean;
   }>(),
   {
     appSymbol: "extension",
