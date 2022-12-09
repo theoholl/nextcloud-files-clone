@@ -4,7 +4,7 @@ import FilesSidebar from "@/components/FilesSidebar.vue";
 </script>
 
 <template>
-  <div class="h-full flex flex-col pb-1">
+  <div class="h-full flex flex-col pb-1 bg-[url('../assets/kamil-porembinski-clouds.jpg')] bg-center">
     <HeaderBar />
     <div class="flex grow mx-2 rounded-[28px] overflow-hidden">
       <FilesSidebar />
