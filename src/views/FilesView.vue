@@ -40,7 +40,10 @@ import FilesSidebar from "@/components/FilesSidebar.vue";
         <table class="w-full">
           <thead class="text-left text-gray-500">
             <tr>
-              <th class="p-2 pl-4"><input type="checkbox" /></th>
+              <th class="pl-2">
+                <label class="p-2 inline-block leading-[0]" for="all-files"><input id="all-files" type="checkbox" /></label>
+              </th>
+
               <th class="w-12 p-2"></th>
               <th class="w-full p-2">
                 <button class="flex content-center gap-1">
@@ -56,7 +59,9 @@ import FilesSidebar from "@/components/FilesSidebar.vue";
 
           <tbody class="whitespace-nowrap">
             <tr class="border-y">
-              <td class="p-2 pl-4"><input type="checkbox" /></td>
+              <th class="pl-2">
+                <label class="p-2 inline-block leading-[0]" for="this-file"><input id="this-file" type="checkbox" /></label>
+              </th>
               <td class="w-12 pr-0">
                 <a href="#" tabindex="-1" class="block p-2">
                   <div
