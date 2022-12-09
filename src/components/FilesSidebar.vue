@@ -18,7 +18,7 @@ const bottomButtons = [
 
 <template>
   <aside
-    class="flex flex-col justify-between min-w-[300px] p-2 bg-[#FFFFFFCC] overflow-scroll"
+    class="flex flex-col justify-between min-w-[300px] p-2 bg-[#FFFFFFCC] overflow-scroll backdrop-blur"
   >
     <menu class="flex flex-col gap-1">
       <li v-for="item in topButtons">
