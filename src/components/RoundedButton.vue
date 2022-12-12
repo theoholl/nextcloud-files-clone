@@ -25,5 +25,3 @@ withDefaults(
     <span> {{ text }} </span>
   </button>
 </template>
-
-<style scoped></style>

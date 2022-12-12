@@ -54,5 +54,3 @@ const areAppNamesVisible = ref(false);
     </div>
   </header>
 </template>
-
-<style scoped></style>

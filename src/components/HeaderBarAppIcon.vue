@@ -43,5 +43,3 @@ withDefaults(
     </span>
   </a>
 </template>
-
-<style scoped></style>
