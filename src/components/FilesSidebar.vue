@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import RoundedButton from "@/components/RoundedButton.vue";
 
+defineProps<{
+  isVisibleOnMobile: boolean;
+}>();
+
 const topButtons = [
   { text: "All files", symbol: "folder", isActive: true },
   { text: "Recent", symbol: "schedule", isActive: false },
@@ -19,6 +23,7 @@ const bottomButtons = [
 <template>
   <aside
     class="flex flex-col justify-between min-w-[300px] p-2 bg-[#FFFFFFCC] overflow-scroll backdrop-blur"
+    :class="isVisibleOnMobile ? 'min-w-[300px]' : 'max-sm:hidden'"
   >
     <menu class="flex flex-col gap-1">
       <li v-for="item in topButtons">

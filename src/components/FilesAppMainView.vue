@@ -1,7 +1,18 @@
+<script setup lang="ts">
+defineProps<{
+  toggleSidebar: () => void;
+}>();
+</script>
+
 <template>
   <main class="grow py-2 bg-white">
     <div class="flex justify-between items-center p-1 pb-3">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 pl-2">
+        <button class="leading-[0] p-1 sm:hidden" @click="toggleSidebar()">
+          <span class="material-symbols-rounded text-[1rem] text-gray-500">
+            menu
+          </span>
+        </button>
         <button class="leading-[0] p-1">
           <span class="material-symbols-rounded text-[1rem] text-gray-500">
             home
@@ -42,8 +53,8 @@
             </button>
           </th>
           <th></th>
-          <th class="p-2"><button>Size</button></th>
-          <th class="p-2 pr-8"><button>Modified</button></th>
+          <th class="p-2 max-md:hidden"><button>Size</button></th>
+          <th class="p-2 pr-8 max-md:hidden"><button>Modified</button></th>
         </tr>
       </thead>
 
@@ -78,8 +89,8 @@
               </button>
             </div>
           </td>
-          <td class="p-2">&lt; 1 KB</td>
-          <td class="p-2 pr-8">10 hours ago</td>
+          <td class="p-2 max-md:hidden">&lt; 1 KB</td>
+          <td class="p-2 pr-8 max-md:hidden">10 hours ago</td>
         </tr>
       </tbody>
 
@@ -89,7 +100,7 @@
           <td></td>
           <td class="p-2">1 file</td>
           <td></td>
-          <td class="p-2 text-right">164 B</td>
+          <td class="p-2 text-right max-md:hidden">164 B</td>
           <td></td>
         </tr>
       </tfoot>

@@ -2,6 +2,16 @@
 import HeaderBar from "@/components/HeaderBar.vue";
 import FilesSidebar from "@/components/FilesSidebar.vue";
 import FilesAppMainViewVue from "@/components/FilesAppMainView.vue";
+
+import { ref } from "vue";
+
+const isSidebarVisibleOnMobile = ref(false);
+const toggleSidebar = () => {
+  {
+    console.log("toggled")
+    isSidebarVisibleOnMobile.value = !isSidebarVisibleOnMobile.value;
+  }
+};
 </script>
 
 <template>
@@ -10,8 +20,8 @@ import FilesAppMainViewVue from "@/components/FilesAppMainView.vue";
   >
     <HeaderBar />
     <div class="flex grow mx-2 rounded-[28px] overflow-hidden">
-      <FilesSidebar />
-      <FilesAppMainViewVue />
+      <FilesSidebar :is-visible-on-mobile="isSidebarVisibleOnMobile" />
+      <FilesAppMainViewVue :toggle-sidebar="toggleSidebar" />
     </div>
   </div>
 </template>
