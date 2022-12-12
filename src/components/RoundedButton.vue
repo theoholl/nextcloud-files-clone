@@ -9,7 +9,7 @@ withDefaults(
   {
     symbol: "category",
     text: "Rounded Button",
-    isActive: false
+    isActive: false,
   }
 );
 </script>

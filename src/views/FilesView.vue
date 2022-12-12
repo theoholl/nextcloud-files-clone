@@ -6,12 +6,8 @@ import FilesAppMainViewVue from "@/components/FilesAppMainView.vue";
 import { ref } from "vue";
 
 const isSidebarVisibleOnMobile = ref(false);
-const toggleSidebar = () => {
-  {
-    console.log("toggled")
-    isSidebarVisibleOnMobile.value = !isSidebarVisibleOnMobile.value;
-  }
-};
+const toggleSidebar = () =>
+  (isSidebarVisibleOnMobile.value = !isSidebarVisibleOnMobile.value);
 </script>
 
 <template>
