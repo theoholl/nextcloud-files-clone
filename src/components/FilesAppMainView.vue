@@ -1,7 +1,71 @@
 <script setup lang="ts">
+import { ref, type Ref } from "vue";
+
+type File = { name: string; size: number; modified: string; selected: boolean };
+
 defineProps<{
   toggleSidebar: () => void;
 }>();
+
+const areAllFilesSelected = ref<boolean>(false);
+
+const files = ref<File[]>([
+  {
+    name: "welcome.txt",
+    size: 2000000,
+    modified: "10 hours ago",
+    selected: false,
+  },
+  {
+    name: "welcome.pdf",
+    size: 164000,
+    modified: "10 hours ago",
+    selected: false,
+  },
+]);
+
+const toggleFileSelection = (filename: string) => {
+  // Avoiding here more complex logic for keeping track
+  // of the number of selected files
+  areAllFilesSelected.value = false;
+
+  // Find list position of file with given file name
+  let idx: number | null = null;
+  files.value.forEach((file, fIdx) => filename === file.name && (idx = fIdx));
+
+  // Toggle selection found file
+  if (typeof idx === "number") {
+    let filesCopy = [...files.value];
+    filesCopy[idx] = {
+      ...files.value[idx],
+      selected: !files.value[idx].selected,
+    };
+    files.value = filesCopy;
+  }
+};
+
+const toggleAllFiles = () => {
+  let filesCopy = [...files.value];
+  filesCopy.forEach(
+    (file, fIdx) => (filesCopy[fIdx].selected = !areAllFilesSelected.value)
+  );
+  
+  areAllFilesSelected.value = !areAllFilesSelected.value;
+  files.value = filesCopy;
+};
+
+const totalFileSize = (): number => {
+  let total = 0;
+  files.value.forEach((file) => (total += file.size));
+  return total;
+};
+
+const readableFileSize = (size: number): string => {
+  if (size < 1000) return "< 1 KB";
+  if (size < 1000000) return `${Math.round(size / 1000)} KB`;
+  if (size < 1000000000) return `${Math.round(size / 1000000)} MB`;
+  return `${Math.round(size / 1000000000)} GB`;
+};
 </script>
 
 <template>
@@ -39,12 +103,13 @@ defineProps<{
     <table class="w-full">
       <thead class="text-left text-gray-500">
         <tr>
-          <th class="pl-2">
-            <label class="p-2 inline-block leading-[0]" for="all-files"
-              ><input id="all-files" type="checkbox"
-            /></label>
+          <th class="pl-4" @click="toggleAllFiles">
+            <input
+              :checked="areAllFilesSelected"
+              type="checkbox"
+              @select="toggleAllFiles"
+            />
           </th>
-
           <th class="w-12 p-2"></th>
           <th class="w-full p-2">
             <button class="flex content-center gap-1">
@@ -59,12 +124,14 @@ defineProps<{
       </thead>
 
       <tbody class="whitespace-nowrap">
-        <tr class="border-y">
-          <th class="pl-2">
-            <label class="p-2 inline-block leading-[0]" for="this-file"
-              ><input id="this-file" type="checkbox"
-            /></label>
-          </th>
+        <tr class="border-y" v-for="file in files" :key="file.name">
+          <td class="p-2 pl-4" @click="toggleFileSelection(file.name)">
+            <input
+              :checked="file.selected"
+              type="checkbox"
+              @select="toggleFileSelection(file.name)"
+            />
+          </td>
           <td class="w-12 pr-0">
             <a href="#" tabindex="-1" class="block p-2">
               <div
@@ -73,7 +140,7 @@ defineProps<{
             </a>
           </td>
           <td class="pl-0">
-            <a href="#" class="block p-2"> welcome.txt </a>
+            <a href="#" class="block p-2"> {{ file.name }} </a>
           </td>
           <td class="p-2">
             <div class="flex gap-2 text-gray-500">
@@ -89,18 +156,23 @@ defineProps<{
               </button>
             </div>
           </td>
-          <td class="p-2 max-md:hidden">&lt; 1 KB</td>
-          <td class="p-2 pr-8 max-md:hidden">10 hours ago</td>
+          <td class="p-2 max-md:hidden">{{ readableFileSize(file.size) }}</td>
+          <td class="p-2 pr-8 max-md:hidden">{{ file.modified }}</td>
         </tr>
       </tbody>
 
-      <tfoot>
+      <tfoot class="whitespace-nowrap">
         <tr class="text-gray-500">
           <td></td>
           <td></td>
-          <td class="p-2">1 file</td>
+          <td class="p-2">
+            <span v-if="files.length == 1">1 file</span>
+            <span v-else>{{ files.length }} files</span>
+          </td>
           <td></td>
-          <td class="p-2 text-right max-md:hidden">164 B</td>
+          <td class="p-2 text-right max-md:hidden">
+            {{ readableFileSize(totalFileSize()) }}
+          </td>
           <td></td>
         </tr>
       </tfoot>
