@@ -46,5 +46,3 @@ const bottomButtons = [
     </menu>
   </aside>
 </template>
-
-<style scoped></style>
