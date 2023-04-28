@@ -1,22 +1,29 @@
 <script setup lang="ts">
-import { ref, type Ref } from "vue";
-
-type File = { name: string; size: number; modified: string; selected: boolean };
+import { ref } from "vue";
 
 defineProps<{
+  isSidebarVisible: boolean;
   toggleSidebar: () => void;
 }>();
 
-const areAllFilesSelected = ref<boolean>(false);
+type File = {
+  id: string;
+  name: string;
+  size: number;
+  modified: string;
+  selected: boolean;
+};
 
 const files = ref<File[]>([
   {
+    id: "b830d7c1-82f3-4c7f-92df-6b94aeb778b9",
     name: "welcome.txt",
     size: 2000000,
     modified: "10 hours ago",
     selected: false,
   },
   {
+    id: "21731e5d-f039-4b94-8edc-2a32dcecf7fa",
     name: "welcome.pdf",
     size: 164000,
     modified: "10 hours ago",
@@ -24,40 +31,46 @@ const files = ref<File[]>([
   },
 ]);
 
-const toggleFileSelection = (filename: string) => {
-  // Avoiding here more complex logic for keeping track
-  // of the number of selected files
-  areAllFilesSelected.value = false;
+let isSelectAllBoxChecked = false;
 
-  // Find list position of file with given file name
-  let idx: number | null = null;
-  files.value.forEach((file, fIdx) => filename === file.name && (idx = fIdx));
+const handleSelectFile = (fileId: string) => {
+  toggleFileSelection(fileId);
 
-  // Toggle selection found file
-  if (typeof idx === "number") {
-    let filesCopy = [...files.value];
-    filesCopy[idx] = {
-      ...files.value[idx],
-      selected: !files.value[idx].selected,
-    };
-    files.value = filesCopy;
+  if (selectedFilesCount() === files.value.length) {
+    isSelectAllBoxChecked = true;
+  } else {
+    isSelectAllBoxChecked = false;
   }
 };
 
-const toggleAllFiles = () => {
-  let filesCopy = [...files.value];
-  filesCopy.forEach(
-    (file, fIdx) => (filesCopy[fIdx].selected = !areAllFilesSelected.value)
-  );
-  
-  areAllFilesSelected.value = !areAllFilesSelected.value;
-  files.value = filesCopy;
+const toggleSelectAllFiles = () => {
+  files.value = files.value.map((file) => {
+    file.selected = !isSelectAllBoxChecked;
+    return file;
+  });
+
+  isSelectAllBoxChecked = !isSelectAllBoxChecked;
 };
 
-const totalFileSize = (): number => {
-  let total = 0;
-  files.value.forEach((file) => (total += file.size));
-  return total;
+const selectedFilesCount = (): number => {
+  const selectedFiles = files.value.filter((file) => file.selected === true);
+  return selectedFiles.length;
+};
+
+const toggleFileSelection = (fileId: string) => {
+  files.value = files.value.map((file) => {
+    if (file.id === fileId) {
+      file.selected = !file.selected;
+    }
+
+    return file;
+  });
+};
+
+const allFilesSizeInByte = (): number => {
+  let size = 0;
+  files.value.forEach((file) => (size += file.size));
+  return size;
 };
 
 const readableFileSize = (size: number): string => {
@@ -72,12 +85,12 @@ const readableFileSize = (size: number): string => {
   <main class="grow py-2 bg-white">
     <div class="flex justify-between items-center p-1 pb-3">
       <div class="flex items-center gap-2 pl-2">
-        <button class="leading-[0] p-1 sm:hidden" @click="toggleSidebar()">
-          <span class="material-symbols-rounded text-[1rem] text-gray-500">
-            menu
+        <button class="leading-[0] p-1" @click="toggleSidebar()">
+          <span class="material-symbols-rounded text-[1em] text-gray-500">
+            {{ isSidebarVisible ? "menu_open" : "menu" }}
           </span>
         </button>
-        <button class="leading-[0] p-1">
+        <button class="leading-[0] p-1 ml-1">
           <span class="material-symbols-rounded text-[1rem] text-gray-500">
             home
           </span>
@@ -103,12 +116,8 @@ const readableFileSize = (size: number): string => {
     <table class="w-full">
       <thead class="text-left text-gray-500">
         <tr>
-          <th class="pl-4" @click="toggleAllFiles">
-            <input
-              :checked="areAllFilesSelected"
-              type="checkbox"
-              @select="toggleAllFiles"
-            />
+          <th class="pl-4" @click="toggleSelectAllFiles">
+            <input :checked="isSelectAllBoxChecked" type="checkbox" />
           </th>
           <th class="w-12 p-2"></th>
           <th class="w-full p-2">
@@ -118,19 +127,15 @@ const readableFileSize = (size: number): string => {
             </button>
           </th>
           <th></th>
-          <th class="p-2 max-md:hidden"><button>Size</button></th>
-          <th class="p-2 pr-8 max-md:hidden"><button>Modified</button></th>
+          <th class="p-2 max-lg:hidden"><button>Size</button></th>
+          <th class="p-2 pr-8 max-lg:hidden"><button>Modified</button></th>
         </tr>
       </thead>
 
       <tbody class="whitespace-nowrap">
-        <tr class="border-y" v-for="file in files" :key="file.name">
-          <td class="p-2 pl-4" @click="toggleFileSelection(file.name)">
-            <input
-              :checked="file.selected"
-              type="checkbox"
-              @select="toggleFileSelection(file.name)"
-            />
+        <tr class="border-y" v-for="file in files" :key="file.id">
+          <td class="p-2 pl-4" @click="handleSelectFile(file.id)">
+            <input :checked="file.selected" type="checkbox" />
           </td>
           <td class="w-12 pr-0">
             <a href="#" tabindex="-1" class="block p-2">
@@ -156,8 +161,8 @@ const readableFileSize = (size: number): string => {
               </button>
             </div>
           </td>
-          <td class="p-2 max-md:hidden">{{ readableFileSize(file.size) }}</td>
-          <td class="p-2 pr-8 max-md:hidden">{{ file.modified }}</td>
+          <td class="p-2 max-lg:hidden">{{ readableFileSize(file.size) }}</td>
+          <td class="p-2 pr-8 max-lg:hidden">{{ file.modified }}</td>
         </tr>
       </tbody>
 
@@ -170,8 +175,8 @@ const readableFileSize = (size: number): string => {
             <span v-else>{{ files.length }} files</span>
           </td>
           <td></td>
-          <td class="p-2 text-right max-md:hidden">
-            {{ readableFileSize(totalFileSize()) }}
+          <td class="p-2 text-right max-lg:hidden">
+            {{ readableFileSize(allFilesSizeInByte()) }}
           </td>
           <td></td>
         </tr>
