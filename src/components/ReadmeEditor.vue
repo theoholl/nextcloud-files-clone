@@ -19,7 +19,7 @@ const unfocus = () => isFocused.value = false;
       <span class="material-symbols-rounded text-sm"> done </span> saved
     </div>
 
-    <h1 class="text-xl font-bold pb-2">Welcome to Nextcloud! 📱☁💻</h1>
+    <h1 class="text-xl font-bold pb-2">Welcome to Nextcloud! 📱 ☁ 💻</h1>
     <p>
       Here you can add a description or any other info relevant for the folder.
       It will show as a 'Readme.md' file and in the web interface nicely up at

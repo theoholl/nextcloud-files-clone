@@ -11,6 +11,7 @@ type File = {
   id: string;
   name: string;
   size: number;
+  type: "image" | "folder";
   modified: string;
   selected: boolean;
 };
@@ -18,15 +19,25 @@ type File = {
 const files = ref<File[]>([
   {
     id: "b830d7c1-82f3-4c7f-92df-6b94aeb778b9",
-    name: "welcome.txt",
+    name: "welcome.jpeg",
     size: 2000000,
+    type: "image",
     modified: "10 hours ago",
     selected: false,
   },
   {
     id: "21731e5d-f039-4b94-8edc-2a32dcecf7fa",
-    name: "welcome.pdf",
+    name: "lunch-time.avif",
     size: 164000,
+    type: "image",
+    modified: "10 hours ago",
+    selected: false,
+  },
+  {
+    id: "3913adda-55ab-460a-bd36-2f4adeb0b2fa",
+    name: "bookings",
+    size: 2364000,
+    type: "folder",
     modified: "10 hours ago",
     selected: false,
   },
@@ -144,9 +155,18 @@ const readableFileSize = (size: number): string => {
           </td>
           <td class="w-12 pr-0">
             <a href="#" tabindex="-1" class="block p-2">
-              <div
+              <div v-if="file.type === 'image'">
+                <div
                 class="w-8 h-8 bg-gray-100 border border-gray-300 rounded-sm"
-              ></div>
+              ></div></div>
+              <div
+                v-else-if="file.type === 'folder'"
+                class="grid place-items-center w-8 h-8"
+              >
+                <span class="material-symbols-rounded text-gray-500">
+                  {{ file.type }}
+                </span>
+              </div>
             </a>
           </td>
           <td class="pl-0">
@@ -180,7 +200,7 @@ const readableFileSize = (size: number): string => {
             <span v-else>{{ files.length }} files</span>
           </td>
           <td></td>
-          <td class="p-2 text-right max-lg:hidden">
+          <td class="p-2 max-lg:hidden">
             {{ readableFileSize(allFilesSizeInByte()) }}
           </td>
           <td></td>
