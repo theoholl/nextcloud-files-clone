@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ReadmeEditor from "@/components/ReadmeEditor.vue";
 import { ref } from "vue";
 
 defineProps<{
@@ -83,7 +84,7 @@ const readableFileSize = (size: number): string => {
 
 <template>
   <main class="grow py-2 bg-white">
-    <div class="flex justify-between items-center p-1 pb-3">
+    <div class="flex justify-between items-center p-1">
       <div class="flex items-center gap-2 pl-2">
         <button class="leading-[0] p-1" @click="toggleSidebar()">
           <span class="material-symbols-rounded text-[1em] text-gray-500">
@@ -111,6 +112,10 @@ const readableFileSize = (size: number): string => {
           </span>
         </button>
       </div>
+    </div>
+
+    <div class="py-2 px-2 md:px-8 md:pt-4 md:pb-8">
+      <ReadmeEditor />
     </div>
 
     <table class="w-full">
