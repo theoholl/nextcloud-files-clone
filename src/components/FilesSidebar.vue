@@ -2,7 +2,7 @@
 import RoundedButton from "@/components/RoundedButton.vue";
 
 defineProps<{
-  isVisibleOnMobile: boolean;
+  isVisible: boolean;
 }>();
 
 const topButtons = [
@@ -23,7 +23,7 @@ const bottomButtons = [
 <template>
   <aside
     class="flex flex-col justify-between min-w-[300px] p-2 bg-[#FFFFFFCC] overflow-scroll backdrop-blur"
-    :class="isVisibleOnMobile ? 'min-w-[300px]' : 'max-sm:hidden'"
+    :class="isVisible ? 'min-w-[300px]' : 'hidden'"
   >
     <menu class="flex flex-col gap-1">
       <li v-for="item in topButtons">
