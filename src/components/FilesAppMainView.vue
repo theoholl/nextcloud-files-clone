@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import ReadmeEditor from "@/components/ReadmeEditor.vue";
 import { ref } from "vue";
+import ReadmeEditor from "@/components/ReadmeEditor.vue";
+import DropdownMenu from "@/components/DropdownMenu.vue";
 
 defineProps<{
   isSidebarVisible: boolean;
@@ -110,11 +111,13 @@ const readableFileSize = (size: number): string => {
         <span class="material-symbols-rounded text-[1rem] text-gray-400">
           arrow_forward_ios
         </span>
-        <button
-          class="p-2 bg-gray-200 rounded-full leading-[0] border border-gray-300"
-        >
-          <span class="material-symbols-rounded text-gray-500"> add </span>
-        </button>
+        <DropdownMenu>
+          <button
+            class="p-2 bg-gray-200 rounded-full leading-[0] border border-gray-300"
+          >
+            <span class="material-symbols-rounded text-gray-500"> add </span>
+          </button>
+        </DropdownMenu>
       </div>
       <div>
         <button class="leading-[0] p-1 mr-4">
@@ -157,8 +160,9 @@ const readableFileSize = (size: number): string => {
             <a href="#" tabindex="-1" class="block p-2">
               <div v-if="file.type === 'image'">
                 <div
-                class="w-8 h-8 bg-gray-100 border border-gray-300 rounded-sm"
-              ></div></div>
+                  class="w-8 h-8 bg-gray-100 border border-gray-300 rounded-sm"
+                ></div>
+              </div>
               <div
                 v-else-if="file.type === 'folder'"
                 class="grid place-items-center w-8 h-8"
@@ -180,7 +184,7 @@ const readableFileSize = (size: number): string => {
                 </span>
               </button>
               <button class="leading-[0] p-2">
-                <span class="material-symbols-rounded text-[1rem]">
+                <span class="material-symbols-rounded text-[1rem] font-black">
                   more_horiz
                 </span>
               </button>
