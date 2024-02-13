@@ -4,6 +4,13 @@ A simple clone of the Nextcloud Files App. It's not a perfect clone and has a ve
 
 You need Node.js version 16 or higher.
 
+
+| Desktop | Mobile |
+| ------- | ------ |
+| ![text](/screenshots/Files%20Nextcloud%20Desktop.png) |   ![text](/screenshots/Files%20Nextcloud%20Mobile.png) |
+
+
+
 ## Project Setup
 
 Install required dependencies.
