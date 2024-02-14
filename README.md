@@ -1,4 +1,4 @@
-# Nextcloud Files Clone
+# Demo Project: Nextcloud Files Clone
 
 A simple clone of the Nextcloud Files App. It's not a perfect clone and has a very limited feature set.
 
