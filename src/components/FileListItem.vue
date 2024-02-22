@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { VueElement, nextTick, ref } from "vue";
+import type { DirItem } from "@/types";
 import DropdownMenu from "@/components/DropdownMenu.vue";
 import MenuItem from "@/components/MenuItem.vue";
-import type { DirItem } from "@/types";
 
-defineProps<{
+const props = defineProps<{
   item: DirItem;
   handleSelectItem: (fileId: string) => void;
   handleDeleteItem: (fileId: string) => void;
@@ -11,12 +12,23 @@ defineProps<{
   hanldeCopyItem: (fileId: string) => void;
 }>();
 
+const isEditingItemName = ref<boolean>(false);
+const fileNameInput = ref<HTMLInputElement | null>(null);
+
 const handleChangeFileNameButtonClicked = () => {
-  // Focus the input field
+  isEditingItemName.value = true;
+  nextTick(() => {
+    fileNameInput.value?.focus();
+  });
 };
 
 const handleFileNameInputBlur = () => {
-  // Save the new file name
+  isEditingItemName.value = false;
+
+  if (fileNameInput.value !== null) {
+    const inputElement = fileNameInput.value;
+    props.handleChangeItemName(props.item.id, inputElement.value);
+  }
 };
 
 const readableFileSize = (size: number): string => {
@@ -50,7 +62,15 @@ const readableFileSize = (size: number): string => {
       </a>
     </td>
     <td class="pl-0">
-      <a href="#" class="block p-2"> {{ item.name }} </a>
+      <input
+        ref="fileNameInput"
+        v-if="isEditingItemName"
+        @blur="handleFileNameInputBlur"
+        type="text"
+        :value="item.name"
+        class="w-full px-2 py-1"
+      />
+      <a v-else href="#" class="block p-2"> {{ item.name }} </a>
     </td>
     <td class="p-2">
       <div class="flex gap-2 text-gray-500">
@@ -66,7 +86,11 @@ const readableFileSize = (size: number): string => {
             </button>
           </template>
           <template #items>
-            <MenuItem icon="edit" text="Rename" :action="() => {}" />
+            <MenuItem
+              icon="edit"
+              text="Rename"
+              :action="handleChangeFileNameButtonClicked"
+            />
             <MenuItem icon="delete" text="Delete" :action="() => {}" />
             <MenuItem icon="file_copy" text="Make a copy" :action="() => {}" />
           </template>

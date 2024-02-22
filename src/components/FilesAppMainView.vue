@@ -40,8 +40,18 @@ const items = ref<DirItem[]>([
 
 let isSelectAllBoxChecked = false;
 
-const handleSelectItem = (fileId: string) => {
-  toggleItemSelection(fileId);
+const handleChangeItemName = (itemId: string, newItemName: string) => {
+  items.value = items.value.map((item) => {
+    if (item.id === itemId) {
+      item.name = newItemName;
+    }
+
+    return item;
+  });
+}
+
+const handleSelectItem = (itemId: string) => {
+  toggleItemSelection(itemId);
 
   if (selectedItemsCount() === items.value.length) {
     isSelectAllBoxChecked = true;
@@ -158,7 +168,7 @@ const readableFileSize = (size: number): string => {
           :key="item.id"
           :item="item"
           :handleSelectItem="handleSelectItem"
-          :handleChangeItemName="(itemId: string, newName: string) => {}"
+          :handleChangeItemName="handleChangeItemName"
           :handleDeleteItem="(itemId: string) => {}"
           :hanldeCopyItem="(itemId: string) => {}"
         />
