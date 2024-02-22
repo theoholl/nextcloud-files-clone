@@ -50,6 +50,10 @@ const handleChangeItemName = (itemId: string, newItemName: string) => {
   });
 }
 
+const handleDeleteItem = (itemId: string) => {
+  items.value = items.value.filter(item => item.id != itemId);
+}
+
 const handleSelectItem = (itemId: string) => {
   toggleItemSelection(itemId);
 
@@ -169,7 +173,7 @@ const readableFileSize = (size: number): string => {
           :item="item"
           :handleSelectItem="handleSelectItem"
           :handleChangeItemName="handleChangeItemName"
-          :handleDeleteItem="(itemId: string) => {}"
+          :handleDeleteItem="handleDeleteItem"
           :hanldeCopyItem="(itemId: string) => {}"
         />
       </tbody>

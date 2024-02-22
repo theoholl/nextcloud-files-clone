@@ -91,8 +91,8 @@ const readableFileSize = (size: number): string => {
               text="Rename"
               :action="handleChangeFileNameButtonClicked"
             />
-            <MenuItem icon="delete" text="Delete" :action="() => {}" />
-            <MenuItem icon="file_copy" text="Make a copy" :action="() => {}" />
+            <MenuItem icon="delete" text="Delete" :action="() => handleDeleteItem(item.id)" />
+            <MenuItem icon="file_copy" text="Make a copy" :action="() => hanldeCopyItem(item.id)" />
           </template>
         </DropdownMenu>
       </div>
