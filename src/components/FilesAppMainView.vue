@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { DirItem } from "@/types";
+import {v4 as uuidv4} from "uuid";
 import ReadmeEditor from "@/components/ReadmeEditor.vue";
 import DropdownMenu from "@/components/DropdownMenu.vue";
 import MenuItem from "@/components/MenuItem.vue";
-import type { DirItem } from "@/types";
 import FileListItem from "./FileListItem.vue";
 
 defineProps<{
@@ -48,11 +49,25 @@ const handleChangeItemName = (itemId: string, newItemName: string) => {
 
     return item;
   });
-}
+};
 
 const handleDeleteItem = (itemId: string) => {
-  items.value = items.value.filter(item => item.id != itemId);
-}
+  items.value = items.value.filter((item) => item.id != itemId);
+};
+
+const handleCopyItem = (itemId: string) => {
+  const itemToCopy = items.value.filter((item) => item.id === itemId)[0];
+
+  if (itemToCopy) {
+    const newItem = {
+      ...itemToCopy,
+      id: uuidv4(),
+      name: `${itemToCopy.name} (copy)`,
+    };
+
+    items.value = items.value.concat(newItem);
+  }
+};
 
 const handleSelectItem = (itemId: string) => {
   toggleItemSelection(itemId);
@@ -168,13 +183,13 @@ const readableFileSize = (size: number): string => {
 
       <tbody class="whitespace-nowrap">
         <FileListItem
-          v-for="item in items" 
+          v-for="item in items"
           :key="item.id"
           :item="item"
           :handleSelectItem="handleSelectItem"
           :handleChangeItemName="handleChangeItemName"
           :handleDeleteItem="handleDeleteItem"
-          :hanldeCopyItem="(itemId: string) => {}"
+          :hanldeCopyItem="handleCopyItem"
         />
       </tbody>
 
