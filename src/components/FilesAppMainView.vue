@@ -40,17 +40,17 @@ const items = ref<DirItem[]>([
 
 let isSelectAllBoxChecked = false;
 
-const handleSelectFile = (fileId: string) => {
-  toggleFileSelection(fileId);
+const handleSelectItem = (fileId: string) => {
+  toggleItemSelection(fileId);
 
-  if (selectedFilesCount() === items.value.length) {
+  if (selectedItemsCount() === items.value.length) {
     isSelectAllBoxChecked = true;
   } else {
     isSelectAllBoxChecked = false;
   }
 };
 
-const toggleSelectAllFiles = () => {
+const toggleSelectAllItems = () => {
   items.value = items.value.map((items) => {
     items.selected = !isSelectAllBoxChecked;
     return items;
@@ -59,12 +59,12 @@ const toggleSelectAllFiles = () => {
   isSelectAllBoxChecked = !isSelectAllBoxChecked;
 };
 
-const selectedFilesCount = (): number => {
-  const selectedFiles = items.value.filter((item) => item.selected === true);
-  return selectedFiles.length;
+const selectedItemsCount = (): number => {
+  const selectedItems = items.value.filter((item) => item.selected === true);
+  return selectedItems.length;
 };
 
-const toggleFileSelection = (itemId: string) => {
+const toggleItemSelection = (itemId: string) => {
   items.value = items.value.map((item) => {
     if (item.id === itemId) {
       item.selected = !item.selected;
@@ -136,7 +136,7 @@ const readableFileSize = (size: number): string => {
     <table class="w-full">
       <thead class="text-left text-gray-500">
         <tr>
-          <th class="pl-4" @click="toggleSelectAllFiles">
+          <th class="pl-4" @click="toggleSelectAllItems">
             <input :checked="isSelectAllBoxChecked" type="checkbox" />
           </th>
           <th class="w-12 p-2"></th>
@@ -157,7 +157,7 @@ const readableFileSize = (size: number): string => {
           v-for="item in items" 
           :key="item.id"
           :item="item"
-          :handleSelectItem="(itemId: string) => {}"
+          :handleSelectItem="handleSelectItem"
           :handleChangeItemName="(itemId: string, newName: string) => {}"
           :handleDeleteItem="(itemId: string) => {}"
           :hanldeCopyItem="(itemId: string) => {}"
