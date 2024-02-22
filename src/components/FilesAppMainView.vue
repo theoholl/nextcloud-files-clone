@@ -2,13 +2,14 @@
 import { ref } from "vue";
 import ReadmeEditor from "@/components/ReadmeEditor.vue";
 import DropdownMenu from "@/components/DropdownMenu.vue";
+import MenuItem from "@/components/MenuItem.vue";
 
 defineProps<{
   isSidebarVisible: boolean;
   toggleSidebar: () => void;
 }>();
 
-type File = {
+type Item = {
   id: string;
   name: string;
   size: number;
@@ -17,7 +18,7 @@ type File = {
   selected: boolean;
 };
 
-const files = ref<File[]>([
+const files = ref<Item[]>([
   {
     id: "b830d7c1-82f3-4c7f-92df-6b94aeb778b9",
     name: "welcome.jpeg",
@@ -112,11 +113,18 @@ const readableFileSize = (size: number): string => {
           arrow_forward_ios
         </span>
         <DropdownMenu>
-          <button
-            class="p-2 bg-gray-200 rounded-full leading-[0] border border-gray-300"
-          >
-            <span class="material-symbols-rounded text-gray-500"> add </span>
-          </button>
+          <template #button>
+            <button
+              class="p-2 bg-gray-200 rounded-full leading-[0] border border-gray-300"
+            >
+              <span class="material-symbols-rounded text-gray-500"> add </span>
+            </button>
+          </template>
+          <template #items>
+            <MenuItem icon="upload" text="Upload file" :action="() => {}" />
+            <MenuItem icon="folder" text="New folder" :action="() => {}" />
+            <MenuItem icon="draft" text="New text file" :action="() => {}" />
+          </template>
         </DropdownMenu>
       </div>
       <div>

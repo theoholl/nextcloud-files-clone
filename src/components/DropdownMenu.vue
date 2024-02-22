@@ -8,31 +8,14 @@ const toggleShowMenu = () => (showMenu.value = !showMenu.value);
 
 <template>
   <div class="relative">
-    <span v-on:click="toggleShowMenu" class="p-1">
-      <slot></slot>
+    <span @click="toggleShowMenu" class="p-1">
+      <slot name="button"></slot>
     </span>
     <ul
       v-if="showMenu"
       class="absolute left-1/2 -translate-x-1/2 mt-2 bg-white border w-max z-10 rounded-md drop-shadow"
     >
-      <button
-        class="flex gap-2 items-center w-full py-2 px-4 hover:bg-gray-100"
-      >
-        <span class="material-symbols-rounded text-sm"> upload </span>
-        Upload file
-      </button>
-      <button
-        class="flex gap-2 items-center w-full py-2 px-4 hover:bg-gray-100"
-      >
-        <span class="material-symbols-rounded text-sm"> folder </span>
-        New folder
-      </button>
-      <button
-        class="flex gap-2 items-center w-full py-2 px-4 hover:bg-gray-100"
-      >
-        <span class="material-symbols-rounded text-sm"> draft </span>
-        New text file
-      </button>
+      <slot name="items"></slot>
     </ul>
   </div>
 </template>
