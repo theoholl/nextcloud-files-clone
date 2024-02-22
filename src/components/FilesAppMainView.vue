@@ -3,22 +3,15 @@ import { ref } from "vue";
 import ReadmeEditor from "@/components/ReadmeEditor.vue";
 import DropdownMenu from "@/components/DropdownMenu.vue";
 import MenuItem from "@/components/MenuItem.vue";
+import type { DirItem } from "@/types";
+import FileListItem from "./FileListItem.vue";
 
 defineProps<{
   isSidebarVisible: boolean;
   toggleSidebar: () => void;
 }>();
 
-type Item = {
-  id: string;
-  name: string;
-  size: number;
-  type: "image" | "folder";
-  modified: string;
-  selected: boolean;
-};
-
-const files = ref<Item[]>([
+const items = ref<DirItem[]>([
   {
     id: "b830d7c1-82f3-4c7f-92df-6b94aeb778b9",
     name: "welcome.jpeg",
@@ -50,7 +43,7 @@ let isSelectAllBoxChecked = false;
 const handleSelectFile = (fileId: string) => {
   toggleFileSelection(fileId);
 
-  if (selectedFilesCount() === files.value.length) {
+  if (selectedFilesCount() === items.value.length) {
     isSelectAllBoxChecked = true;
   } else {
     isSelectAllBoxChecked = false;
@@ -58,32 +51,32 @@ const handleSelectFile = (fileId: string) => {
 };
 
 const toggleSelectAllFiles = () => {
-  files.value = files.value.map((file) => {
-    file.selected = !isSelectAllBoxChecked;
-    return file;
+  items.value = items.value.map((items) => {
+    items.selected = !isSelectAllBoxChecked;
+    return items;
   });
 
   isSelectAllBoxChecked = !isSelectAllBoxChecked;
 };
 
 const selectedFilesCount = (): number => {
-  const selectedFiles = files.value.filter((file) => file.selected === true);
+  const selectedFiles = items.value.filter((item) => item.selected === true);
   return selectedFiles.length;
 };
 
-const toggleFileSelection = (fileId: string) => {
-  files.value = files.value.map((file) => {
-    if (file.id === fileId) {
-      file.selected = !file.selected;
+const toggleFileSelection = (itemId: string) => {
+  items.value = items.value.map((item) => {
+    if (item.id === itemId) {
+      item.selected = !item.selected;
     }
 
-    return file;
+    return item;
   });
 };
 
 const allFilesSizeInByte = (): number => {
   let size = 0;
-  files.value.forEach((file) => (size += file.size));
+  items.value.forEach((item) => (size += item.size));
   return size;
 };
 
@@ -160,47 +153,15 @@ const readableFileSize = (size: number): string => {
       </thead>
 
       <tbody class="whitespace-nowrap">
-        <tr class="border-y" v-for="file in files" :key="file.id">
-          <td class="p-2 pl-4" @click="handleSelectFile(file.id)">
-            <input :checked="file.selected" type="checkbox" />
-          </td>
-          <td class="w-12 pr-0">
-            <a href="#" tabindex="-1" class="block p-2">
-              <div v-if="file.type === 'image'">
-                <div
-                  class="w-8 h-8 bg-gray-100 border border-gray-300 rounded-sm"
-                ></div>
-              </div>
-              <div
-                v-else-if="file.type === 'folder'"
-                class="grid place-items-center w-8 h-8"
-              >
-                <span class="material-symbols-rounded text-gray-500">
-                  {{ file.type }}
-                </span>
-              </div>
-            </a>
-          </td>
-          <td class="pl-0">
-            <a href="#" class="block p-2"> {{ file.name }} </a>
-          </td>
-          <td class="p-2">
-            <div class="flex gap-2 text-gray-500">
-              <button class="leading-[0] p-2">
-                <span class="material-symbols-rounded text-[1rem]">
-                  share
-                </span>
-              </button>
-              <button class="leading-[0] p-2">
-                <span class="material-symbols-rounded text-[1rem] font-black">
-                  more_horiz
-                </span>
-              </button>
-            </div>
-          </td>
-          <td class="p-2 max-lg:hidden">{{ readableFileSize(file.size) }}</td>
-          <td class="p-2 pr-8 max-lg:hidden">{{ file.modified }}</td>
-        </tr>
+        <FileListItem
+          v-for="item in items" 
+          :key="item.id"
+          :item="item"
+          :handleSelectItem="(itemId: string) => {}"
+          :handleChangeItemName="(itemId: string, newName: string) => {}"
+          :handleDeleteItem="(itemId: string) => {}"
+          :hanldeCopyItem="(itemId: string) => {}"
+        />
       </tbody>
 
       <tfoot class="whitespace-nowrap">
@@ -208,8 +169,8 @@ const readableFileSize = (size: number): string => {
           <td></td>
           <td></td>
           <td class="p-2">
-            <span v-if="files.length == 1">1 file</span>
-            <span v-else>{{ files.length }} files</span>
+            <span v-if="items.length == 1">1 item</span>
+            <span v-else>{{ items.length }} items</span>
           </td>
           <td></td>
           <td class="p-2 max-lg:hidden">
