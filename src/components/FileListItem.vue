@@ -66,6 +66,7 @@ const readableFileSize = (size: number): string => {
         ref="fileNameInput"
         v-if="isEditingItemName"
         @blur="handleFileNameInputBlur"
+        @keyup.enter="handleFileNameInputBlur"
         type="text"
         :value="item.name"
         class="w-full px-2 py-1"
