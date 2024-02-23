@@ -41,6 +41,16 @@ const items = ref<DirItem[]>([
 
 let isSelectAllBoxChecked = false;
 
+const compareitemNames = (a: DirItem, b: DirItem) => {
+  if (a.name < b.name) {
+    return -1;
+  }
+  if (a.name > b.name) {
+    return 1;
+  }
+  return 0;
+};
+
 const handleChangeItemName = (itemId: string, newItemName: string) => {
   items.value = items.value.map((item) => {
     if (item.id === itemId) {
@@ -183,7 +193,7 @@ const readableFileSize = (size: number): string => {
 
       <tbody class="whitespace-nowrap">
         <FileListItem
-          v-for="item in items"
+          v-for="item in items.sort(compareitemNames)"
           :key="item.id"
           :item="item"
           :handleSelectItem="handleSelectItem"
